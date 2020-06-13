@@ -1,8 +1,14 @@
 import React from "react";
-import logo from "./logo.svg";
+// import logo from "./logo.svg";
 import "./App.css";
 
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Button, Carousel } from "react-bootstrap";
+
+import LandingPage from "./pages/LandingPage";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 import Header from "./components/Header";
 
@@ -30,12 +36,12 @@ import Header from "./components/Header";
 const App = () => {
   return (
     <div className="App">
-      <Header />
-      <div className="hero">
-        <div className="hero-content">
-          <h1>PPBM</h1>
-        </div>
-      </div>
+      <Router>
+        <Route exact path="/" component={LandingPage} />
+        <Route exact path="/home" component={Home} />
+        <Route exact path="/Login" component={Login} />
+        <Route exact path="/Signup" component={Signup} />
+      </Router>
     </div>
   );
 };
