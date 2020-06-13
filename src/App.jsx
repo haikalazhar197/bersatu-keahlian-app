@@ -3,14 +3,14 @@ import React from "react";
 import "./App.css";
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Button, Carousel } from "react-bootstrap";
 
 import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
-import Header from "./components/Header";
+import PrivateRoute from "./utils/PrivateRoute";
+import { AuthProvider } from "./utils/Auth";
 
 // function App() {
 //   return (
@@ -36,12 +36,14 @@ import Header from "./components/Header";
 const App = () => {
   return (
     <div className="App">
-      <Router>
-        <Route exact path="/" component={LandingPage} />
-        <Route exact path="/home" component={Home} />
-        <Route exact path="/Login" component={Login} />
-        <Route exact path="/Signup" component={Signup} />
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Route exact path="/" component={LandingPage} />
+          <PrivateRoute exact path="/home" component={Home} />
+          <Route exact path="/Login" component={Login} />
+          <Route exact path="/Signup" component={Signup} />
+        </Router>
+      </AuthProvider>
     </div>
   );
 };

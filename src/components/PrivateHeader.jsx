@@ -1,10 +1,23 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { Navbar, Nav, Button } from "react-bootstrap";
 
 import SideBar from "./SideBar";
 
+import app from "../utils/fire";
+
 const PrivateHeader = () => {
+  const history = useHistory();
+
+  const signOut = async () => {
+    try {
+      await app.auth().signOut();
+      history.replace("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Navbar
       collapseOnSelect
@@ -22,7 +35,9 @@ const PrivateHeader = () => {
         <Nav className="mr-auto"></Nav>
         <Nav style={{ marginRight: "3rem" }}>
           <NavLink to="/login">
-            <Button variant="light">LogOut</Button>
+            <Button variant="light" onClick={signOut}>
+              LogOut
+            </Button>
           </NavLink>
         </Nav>
       </Navbar.Collapse>
