@@ -8,6 +8,7 @@ import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Search from "./pages/Search";
 
 import PrivateRoute from "./utils/PrivateRoute";
 import { AuthProvider } from "./utils/Auth";
@@ -18,7 +19,7 @@ const App = () => {
       <AuthProvider>
         <Router>
           <Route exact path="/" component={LandingPage} />
-          <PrivateRoute exact path="/home" component={Home} />
+          <PrivateRoute path="/home" component={Home} />
           <Route exact path="/Login" component={Login} />
           <Route exact path="/Signup" component={Signup} />
         </Router>

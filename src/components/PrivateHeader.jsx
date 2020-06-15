@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink, useHistory, useRouteMatch } from "react-router-dom";
 import { Navbar, Nav, Button, Card } from "react-bootstrap";
 
 import SideBar from "./SideBar";
@@ -11,9 +11,33 @@ import { AuthContext } from "../utils/Auth";
 const UserPopup = () => {
   const { currentUser } = useContext(AuthContext);
 
+  const signOut = async () => {
+    try {
+      await app.auth().signOut();
+      // history.replace("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <Card>
-      <Card.Title>User</Card.Title>
+    <Card
+      style={{
+        position: "absolute",
+        right: "80px",
+        top: "50px",
+        zIndex: 4,
+      }}
+    >
+      <Card.Header className="text-center">
+        {currentUser.displayName}
+      </Card.Header>
+      <Card.Body>{currentUser.email}</Card.Body>
+      <Card.Footer className="d-flex">
+        <Button size="sm" className="mx-auto" onClick={signOut}>
+          Log Out
+        </Button>
+      </Card.Footer>
     </Card>
   );
 };
@@ -21,15 +45,14 @@ const UserPopup = () => {
 const PrivateHeader = () => {
   const history = useHistory();
   const { currentUser } = useContext(AuthContext);
+  const [showUser, setShowUser] = useState(false);
 
-  const signOut = async () => {
-    try {
-      await app.auth().signOut();
-      history.replace("/");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // useEffect(() => {
+  //   console.log(path, url);
+  //   return () => {
+  //     console.trace("Im Out");
+  //   };
+  // }, []);
 
   return (
     <Navbar
@@ -39,7 +62,7 @@ const PrivateHeader = () => {
       variant="dark"
       className="nav-bar"
     >
-      <Navbar.Brand href="#home" style={{ marginLeft: "2rem" }}>
+      <Navbar.Brand style={{ marginLeft: "2rem" }}>
         <SideBar />
         PPBM BERSATU
       </Navbar.Brand>
@@ -47,13 +70,12 @@ const PrivateHeader = () => {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto"></Nav>
         <Nav style={{ marginRight: "3rem" }}>
-          <NavLink to="/login">
-            <Button variant="light" onClick={signOut}>
-              {currentUser.displayName}
-            </Button>
-          </NavLink>
+          <Button variant="light" onClick={() => setShowUser(!showUser)}>
+            {currentUser.displayName}
+          </Button>
         </Nav>
       </Navbar.Collapse>
+      {showUser && <UserPopup />}
     </Navbar>
   );
 };
