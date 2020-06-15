@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { NavLink, useHistory } from "react-router-dom";
-import { Navbar, Nav, Button } from "react-bootstrap";
+import { Navbar, Nav, Button, Card } from "react-bootstrap";
 
 import SideBar from "./SideBar";
 
 import app from "../utils/fire";
 
+import { AuthContext } from "../utils/Auth";
+
+const UserPopup = () => {
+  const { currentUser } = useContext(AuthContext);
+
+  return (
+    <Card>
+      <Card.Title>User</Card.Title>
+    </Card>
+  );
+};
+
 const PrivateHeader = () => {
   const history = useHistory();
+  const { currentUser } = useContext(AuthContext);
 
   const signOut = async () => {
     try {
@@ -36,7 +49,7 @@ const PrivateHeader = () => {
         <Nav style={{ marginRight: "3rem" }}>
           <NavLink to="/login">
             <Button variant="light" onClick={signOut}>
-              LogOut
+              {currentUser.displayName}
             </Button>
           </NavLink>
         </Nav>

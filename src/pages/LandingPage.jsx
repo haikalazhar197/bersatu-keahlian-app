@@ -26,7 +26,11 @@ export default () => {
               justifyContent: "space-around",
             }}
           >
-            <Button size="lg" variant="success">
+            <Button
+              size="lg"
+              variant="success"
+              onClick={() => history.push("/signup")}
+            >
               Daftar
             </Button>
             <Button
