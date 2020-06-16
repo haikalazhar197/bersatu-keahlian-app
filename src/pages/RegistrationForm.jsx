@@ -1,6 +1,9 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 
-import { Card, ListGroup, Nav, Form, Row, Col } from "react-bootstrap";
+import { Card, ListGroup, Nav, Form, Row, Col, Button } from "react-bootstrap";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import {
   useRouteMatch,
@@ -19,17 +22,45 @@ import { AuthContext } from "../utils/Auth";
 const DetailsPage = () => {
   const { type } = useParams();
   const { currentUser } = useContext(AuthContext);
+  // const [selectedDate, setSelectedDate] = useState(null);
+  const history = useHistory();
+
+  const [birthDate, setBirthDate] = useState(new Date());
+  const [fullName, setFullName] = useState("");
+  const [nric, setNric] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zip, setZip] = useState("");
 
   useEffect(() => {
-    console.log(type);
+    // console.log(type);
+    console.log(birthDate);
     return () => {
       console.trace("Im Out");
     };
-  }, []);
+  }, [birthDate]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const registrationData = {
+      fullName,
+      nric,
+      address,
+      city,
+      zip,
+      state,
+      email: currentUser.email,
+    };
+
+    console.log("submitting", registrationData);
+  };
+
   return (
     <Card.Body>
       {/* <Card.Text>{type}</Card.Text> */}
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group as={Row} controlId="formPlaintextEmail">
           <Form.Label column sm="2">
             Email
@@ -44,7 +75,12 @@ const DetailsPage = () => {
             Full name
           </Form.Label>
           <Col sm="10">
-            <Form.Control type="text" placeholder="enter full name" />
+            <Form.Control
+              type="text"
+              placeholder="enter full name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+            />
           </Col>
         </Form.Group>
 
@@ -53,53 +89,77 @@ const DetailsPage = () => {
             NRIC
           </Form.Label>
           <Col sm="10">
-            <Form.Control type="text" placeholder="ic number" />
+            <Form.Control
+              type="text"
+              placeholder="ic number"
+              value={nric}
+              onChange={(e) => setNric(e.target.value)}
+            />
           </Col>
         </Form.Group>
 
         <Form.Group controlId="formGridAddress1">
           <Form.Label>Address</Form.Label>
-          <Form.Control placeholder="1234 Main St" />
-        </Form.Group>
-
-        <Form.Group controlId="formGridAddress2">
-          <Form.Label>Address 2</Form.Label>
-          <Form.Control placeholder="Apartment, studio, or floor" />
+          <Form.Control
+            placeholder="1234 Main St"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
         </Form.Group>
 
         <Form.Row>
           <Form.Group as={Col} controlId="formGridCity">
             <Form.Label>City</Form.Label>
-            <Form.Control />
+            <Form.Control
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridState">
             <Form.Label>State</Form.Label>
-            <Form.Control as="select" defaultValue="Choose...">
-              <option>Choose...</option>
-              <option>...</option>
-            </Form.Control>
+            <Form.Control
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+            />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridZip">
             <Form.Label>Zip</Form.Label>
-            <Form.Control />
+            <Form.Control
+              value={zip}
+              onChange={(e) => setZip(e.target.value)}
+            />
           </Form.Group>
         </Form.Row>
 
-        <Form.Group>
-          <Form.Label>Date of Birth</Form.Label>
-          {/* <DatePicker /> */}
-        </Form.Group>
-
-        {/* <Form.Group as={Row} controlId="formPlaintextPassword">
+        <Form.Group as={Row} controlId="formPlaintextEmail">
           <Form.Label column sm="2">
-            Password
+            Date of Birth
           </Form.Label>
           <Col sm="10">
-            <Form.Control type="password" placeholder="Password" />
+            <Form.Control
+              placeholder="dd/mm/yyy"
+              type="date"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+            />
           </Col>
-        </Form.Group> */}
+        </Form.Group>
+
+        <Row className="justify-content-end p-3">
+          <Col lg="1">
+            <Button
+              variant="outline-primary"
+              onClick={() => history.push("/home/register")}
+            >
+              Back
+            </Button>
+          </Col>
+          <Col lg="1">
+            <Button type="submit">Submit</Button>
+          </Col>
+        </Row>
       </Form>
     </Card.Body>
   );
@@ -118,10 +178,10 @@ const RegistrationForm = () => {
 
   return (
     <div className="p-5 m-auto" style={{ maxWidth: "1300px" }}>
-      <Card>
+      <Card className="mb-5">
         <Card.Header className="d-flex justify-content-between">
           <Card.Title>Registration Form</Card.Title>
-          <Nav>
+          {/* <Nav>
             <Nav.Item>
               <NavLink
                 to={`${path}`}
@@ -132,12 +192,13 @@ const RegistrationForm = () => {
             </Nav.Item>
             <Nav.Item>Choose Type</Nav.Item>
             <Nav.Item>Choose Type</Nav.Item>
-          </Nav>
+          </Nav> */}
         </Card.Header>
 
         <Switch>
           <Route exact path={path}>
             <Card.Body>
+              <Card.Text>Select Type</Card.Text>
               <ListGroup>
                 <ListGroup.Item
                   action
