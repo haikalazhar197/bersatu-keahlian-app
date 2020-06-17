@@ -64,7 +64,7 @@ const PrivateHeader = () => {
     >
       <Navbar.Brand style={{ marginLeft: "2rem" }}>
         <SideBar />
-        PPBM BERSATU
+        Keahlian ppbm BERSATU
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">

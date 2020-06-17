@@ -12,7 +12,7 @@ const Header = () => {
       className="nav-bar"
     >
       <Navbar.Brand href="#home" style={{ marginLeft: "2rem" }}>
-        PPBM BERSATU
+        Keahlian ppbm BERSATU
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">

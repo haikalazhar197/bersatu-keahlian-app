@@ -6,6 +6,8 @@ import { Card, Button, Form, Spinner } from "react-bootstrap";
 import { AuthContext } from "../utils/Auth";
 import app from "../utils/fire";
 
+import axios from "axios";
+
 export default () => {
   const history = useHistory();
   const { currentUser } = useContext(AuthContext);
@@ -33,11 +35,32 @@ export default () => {
     setIsLoading(true);
 
     try {
-      await app.auth().signInWithEmailAndPassword(email, password);
+      const results = await axios.post(
+        "https://asia-east2-ppbmbersatuapp.cloudfunctions.net/api/login/v1",
+        { username: email }
+      );
+
+      if (results.data.error) {
+        console.log(results.data.error.message);
+        setUserError(results.data.error.message);
+      } else {
+        await app
+          .auth()
+          .signInWithEmailAndPassword(results.data.email, password);
+      }
+
+      console.log(results);
     } catch (err) {
       setUserError(err.message);
       console.log(err.message);
     }
+
+    // try {
+    //   await app.auth().signInWithEmailAndPassword(email, password);
+    // } catch (err) {
+    //   setUserError(err.message);
+    //   console.log(err.message);
+    // }
     setIsLoading(false);
   };
 
@@ -61,10 +84,10 @@ export default () => {
           ) : (
             <Form onSubmit={login}>
               <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label>IC NO</Form.Label>
                 <Form.Control
-                  type="email"
-                  placeholder="Enter email"
+                  type="text"
+                  placeholder="Enter Ic"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -84,7 +107,8 @@ export default () => {
               </Form.Group>
               {/* <Button variant="primary" type="submit" className="mx-auto">
                 Login
-              </Button> */}
+              </Button>
+              <Button>Login with email</Button> */}
             </Form>
           )}
         </Card.Body>
@@ -94,7 +118,7 @@ export default () => {
               Login
             </Button>
             <div style={{ textAlign: "center" }}>
-              <Link to="/login">Login with Ic Number</Link>
+              <Link to="/loginemail">Login with Email</Link>
             </div>
           </div>
         </Card.Footer>

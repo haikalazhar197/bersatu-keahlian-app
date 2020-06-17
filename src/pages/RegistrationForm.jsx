@@ -1,9 +1,18 @@
 import React, { useEffect, useContext, useState } from "react";
 
-import { Card, ListGroup, Nav, Form, Row, Col, Button } from "react-bootstrap";
+import {
+  Card,
+  ListGroup,
+  Nav,
+  Form,
+  Row,
+  Col,
+  Button,
+  Spinner,
+} from "react-bootstrap";
 
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 
 import {
   useRouteMatch,
@@ -13,6 +22,8 @@ import {
   useParams,
   NavLink,
 } from "react-router-dom";
+
+import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserPlus } from "@fortawesome/free-solid-svg-icons";
@@ -33,6 +44,8 @@ const DetailsPage = () => {
   const [state, setState] = useState("");
   const [zip, setZip] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     // console.log(type);
     console.log(birthDate);
@@ -41,8 +54,9 @@ const DetailsPage = () => {
     };
   }, [birthDate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const registrationData = {
       fullName,
@@ -51,11 +65,74 @@ const DetailsPage = () => {
       city,
       zip,
       state,
+      birthDate,
       email: currentUser.email,
+      uid: currentUser.uid,
     };
 
-    console.log("submitting", registrationData);
+    try {
+      const response = await axios.post(
+        "https://asia-east2-ppbmbersatuapp.cloudfunctions.net/api/register/v1",
+        { data: registrationData }
+      );
+
+      setIsLoading(false);
+      console.log(response.data);
+      history.push("/home");
+      return null;
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+
+    // currentUser
+    //   .getIdToken(/* forceRefresh */ true)
+    //   .then((idToken) => {
+    //     console.log(idToken);
+
+    //     const registrationData = {
+    //       fullName,
+    //       nric,
+    //       address,
+    //       city,
+    //       zip,
+    //       state,
+    //       birthDate,
+    //       email: currentUser.email,
+    //       uid: currentUser.uid,
+    //     };
+    //     // register(registrationData);
+    //     console.log(registrationData);
+    //   })
+    //   .catch((error) => {
+    //     // Handle error
+    //     console.log(error);
+    //   });
+
+    console.log("submitting", registrationData, currentUser);
   };
+
+  const register = async (registrationData) => {
+    try {
+      const response = await axios.post(
+        "https://asia-east2-ppbmbersatuapp.cloudfunctions.net/api/register/v1",
+        registrationData
+      );
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Card.Body>
+        <Spinner animation="border" role="status" variant="primary">
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+      </Card.Body>
+    );
+  }
 
   return (
     <Card.Body>
@@ -181,18 +258,6 @@ const RegistrationForm = () => {
       <Card className="mb-5">
         <Card.Header className="d-flex justify-content-between">
           <Card.Title>Registration Form</Card.Title>
-          {/* <Nav>
-            <Nav.Item>
-              <NavLink
-                to={`${path}`}
-                activeClassName="opacity-dark sidebar-link"
-              >
-                Choose Type
-              </NavLink>
-            </Nav.Item>
-            <Nav.Item>Choose Type</Nav.Item>
-            <Nav.Item>Choose Type</Nav.Item>
-          </Nav> */}
         </Card.Header>
 
         <Switch>

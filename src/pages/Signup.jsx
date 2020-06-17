@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useHistory, Redirect } from "react-router-dom";
+import { useHistory, Redirect, Link } from "react-router-dom";
 
 import { Card, Form, Button, Spinner } from "react-bootstrap";
 
@@ -70,7 +70,7 @@ export default () => {
   return (
     <div className="full-page flex-center bg-image">
       <Card style={{ marginBottom: "100px", width: "350px" }}>
-        <Card.Header>Sign Up to Register</Card.Header>
+        <Card.Header>Daftar Akaun</Card.Header>
         <Card.Body>
           {submitting ? (
             <Spinner animation="border" role="status" variant="primary">
@@ -79,10 +79,10 @@ export default () => {
           ) : (
             <Form onSubmit={register}>
               <Form.Group>
-                <Form.Label>Name</Form.Label>
+                <Form.Label>NO IC</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter Name"
+                  placeholder="Masukan NO IC"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -92,10 +92,11 @@ export default () => {
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
                   type="email"
-                  placeholder="Enter email"
+                  placeholder="Masukan Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+                <Form.Text className="text-muted">Untuk pengesahan</Form.Text>
               </Form.Group>
 
               <Form.Group controlId="formBasicPassword">
@@ -110,12 +111,19 @@ export default () => {
               <Form.Group>
                 <Form.Text>{userError}</Form.Text>
               </Form.Group>
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
             </Form>
           )}
         </Card.Body>
+        <Card.Footer>
+          <div className="d-flex flex-column justify-content-center">
+            <Button variant="primary" onClick={register}>
+              Daftar Akaun
+            </Button>
+            <div style={{ textAlign: "center" }}>
+              <Link to="/login">Login</Link>
+            </div>
+          </div>
+        </Card.Footer>
       </Card>
     </div>
   );
